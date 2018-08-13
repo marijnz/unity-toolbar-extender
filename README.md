@@ -6,8 +6,8 @@ Add buttons to quickly access scenes, add sliders, toggles, anything.
 
 ![Imgur](https://i.imgur.com/abmO3VB.png)
 
-## Example
-This below is from the example gif below. Just copy the class and change it as you like.
+## How to
+This example code is shown in action in the gif below. Just copy the class, change it and make as many as you like. You can remove the _Example_ folder from the project. All you need is _ExtendedToolbarWindow.cs_.
 ```
 	[InitializeOnLoad]
 	public class LeftButtonToolbarWindow : ExtendedToolbarWindow
@@ -26,7 +26,7 @@ This below is from the example gif below. Just copy the class and change it as y
 
 			if(GUI.Button(buttonRect, "1", Styles.commandButtonStyle))
 			{
-				SceneHelper.StartScene("Assets/ToolbarExtender/Scenes/Scene1.unity");
+				SceneHelper.StartScene("Assets/ToolbarExtender/Example/Scenes/Scene1.unity");
 			}
 		}
 	}
