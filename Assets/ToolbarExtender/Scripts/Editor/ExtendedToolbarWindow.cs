@@ -32,13 +32,14 @@ namespace ToolbarExtender
 			public Type type;
 			public ExtendedToolbarWindow window;
 			public float horizontalOffset;
+			public float width;
 		}
 
 		static readonly BindingFlags BindingFlags = (BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);
 
 		static List<ToolbarInstance> toolbarInstances;
 
-		protected static void RegisterToolbarWindow<T>(float horizontalOffset) where T : ExtendedToolbarWindow
+		protected static void RegisterToolbarWindow<T>(float horizontalOffset, float width) where T : ExtendedToolbarWindow
 		{
 			// Ensure there's an update loop
 			if(toolbarInstances == null)
@@ -50,7 +51,8 @@ namespace ToolbarExtender
 			toolbarInstances.Add(new ToolbarInstance
 			{
 				type = typeof(T),
-				horizontalOffset = horizontalOffset
+				horizontalOffset = horizontalOffset,
+				width = width
 			});
 		}
 
@@ -78,7 +80,8 @@ namespace ToolbarExtender
 						instance.window.ShowPopup();
 					}
 
-					instance.window.offsetX = instance.horizontalOffset;
+					instance.window.horizontalOffset = instance.horizontalOffset;
+					instance.window.width = instance.width;
 				}
 			}
 		}
@@ -88,7 +91,8 @@ namespace ToolbarExtender
 		#region EditorWindow implementation
 
 		[SerializeField] bool initialized;
-		float offsetX;
+		float horizontalOffset;
+		float width;
 
 		protected virtual void OnGUI()
 		{
@@ -164,9 +168,9 @@ namespace ToolbarExtender
 			var windowPosition = (Rect) positionProperty.GetValue(window, null);
 
 			var rect = new Rect();
-			rect.width = 35;
+			rect.width = width;
 			rect.height = 30;
-			rect.x = windowPosition.width / 2 + offsetX - 18;
+			rect.x = windowPosition.width / 2 + horizontalOffset - 18;
 			rect.y = 1;
 
 			// Set position

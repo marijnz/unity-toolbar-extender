@@ -9,7 +9,7 @@ namespace ToolbarExtenderExample
 	{
 		static LeftButtonToolbarWindow()
 		{
-			RegisterToolbarWindow<LeftButtonToolbarWindow>(horizontalOffset:-90);
+			RegisterToolbarWindow<LeftButtonToolbarWindow>(width: 35, horizontalOffset:-90);
 		}
 
 		protected override void OnGUI()
@@ -31,7 +31,7 @@ namespace ToolbarExtenderExample
 	{
 		static RightButtonToolbarWindow()
 		{
-			RegisterToolbarWindow<RightButtonToolbarWindow>(horizontalOffset:90);
+			RegisterToolbarWindow<RightButtonToolbarWindow>(width: 35, horizontalOffset:90);
 		}
 
 		protected override void OnGUI()
