@@ -113,6 +113,7 @@ namespace ToolbarExtender
 			}
 
 			UpdatePosition();
+			Repaint();
 		}
 
 		void OnEnable()
