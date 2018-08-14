@@ -14,7 +14,7 @@ This example code is shown in action in the gif below. Just copy the class, chan
 	{
 		static LeftButtonToolbarWindow()
 		{
-			RegisterToolbarWindow<LeftButtonToolbarWindow>(horizontalOffset:-90);
+			RegisterToolbarWindow<LeftButtonToolbarWindow>(width: 35, horizontalOffset:-90);
 		}
 
 		protected override void OnGUI()
