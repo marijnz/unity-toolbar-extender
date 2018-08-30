@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
-using NUnit.Framework;
 using UnityEditor;
 using UnityEngine;
 
@@ -77,7 +76,11 @@ namespace ToolbarExtender
 					{
 						instance.window = (ExtendedToolbarWindow) CreateInstance(instance.type);
 						instance.window.position = Rect.zero;
-						instance.window.ShowPopup();
+
+						var noShadow =  Enum.ToObject(GetUnityEditorType("UnityEditor.ShowMode"), 3);
+						var showWithModeMethod = GetMethod(typeof(EditorWindow), "ShowWithMode");
+
+						showWithModeMethod.Invoke(instance.window, new[] { noShadow });
 					}
 
 					instance.window.horizontalOffset = instance.horizontalOffset;
@@ -90,7 +93,6 @@ namespace ToolbarExtender
 
 		#region EditorWindow implementation
 
-		[SerializeField] bool initialized;
 		float horizontalOffset;
 		float width;
 
@@ -103,92 +105,73 @@ namespace ToolbarExtender
 			}
 		}
 
-		void OnInspectorUpdate()
-		{
-			// Initialize after 1 "frame"
-			if(!initialized)
-			{
-				initialized = true;
-				Initialize();
-			}
-
-			UpdatePosition();
-			Repaint();
-		}
-
 		void OnEnable()
 		{
-			EditorApplication.quitting += OnQuitting;
+		//	EditorApplication.quitting += OnQuitting;
+			EditorApplication.update += OnUpdate;
 		}
 
 		void OnDisable()
 		{
-			EditorApplication.quitting -= OnQuitting;
+			//EditorApplication.quitting -= OnQuitting;
+			EditorApplication.update -= OnUpdate;
+		}
+
+		void OnUpdate()
+		{
+			UpdatePosition();
+			Repaint();
 		}
 
 		void OnQuitting()
 		{
 			// Destroy when quitting Unity, to avoid warnings on the next opening of Unity.
 			// This means any serialized state will be gone when Unity is quit.
-			EditorApplication.quitting -= OnQuitting;
-			DestroyImmediate(this);
+		//	EditorApplication.quitting -= OnQuitting;
+		//	DestroyImmediate(this);
+		}
+
+		object mainWindow;
+
+		void UpdatePosition()
+		{
+			var containerWindowType = GetUnityEditorType("UnityEditor.ContainerWindow");
+
+			if(mainWindow == null)
+			{
+				Initialize();
+			}
+
+			var windowPosition = (Rect) GetProperty(containerWindowType, "position").GetValue(mainWindow, null);
+
+			var rect = new Rect
+			{
+				width = width,
+				height = 30,
+				x = windowPosition.x + windowPosition.width / 2 + horizontalOffset - 18,
+				y = windowPosition.y
+			};
+			position = rect;
 		}
 
 		void Initialize()
 		{
-			initialized = true;
-			var parent = GetField(GetType(), "m_Parent").GetValue(this);
+			var containerWindowType = GetUnityEditorType("UnityEditor.ContainerWindow");
+			var showModeProperty = GetProperty(containerWindowType, "showMode");
 
-			var toolbarRef = GetToolbar();
-
-			var parentWindowProp = GetProperty(parent.GetType(), "window");
-			var parentWindow = (UnityEngine.Object) parentWindowProp.GetValue(parent, new object[0]);
-
-			// Set the root view to null so our window doesn't get cleared when closing it
-			var r = GetField(parentWindow.GetType(), "m_RootView");
-			r.SetValue(parentWindow, null);
-
-			// Close (old) container window
-			var m = GetMethod(parentWindow.GetType(), "Close");
-			m.Invoke(parentWindow, new object[0]);
-
-			// Child to toolbar
-			var classType = GetUnityEditorType("UnityEditor.View");
-			var addChild = GetMethod(toolbarRef.GetType(), "AddChild", classType);
-			addChild.Invoke(toolbarRef, new[] { parent });
-		}
-
-		void UpdatePosition()
-		{
-			// Get parent position
-			var toolbarRef = GetToolbar();
-			var windowProperty = GetProperty(toolbarRef.GetType(), "window");
-			var window = windowProperty.GetValue(toolbarRef, new object[0]);
-
-			var positionProperty = GetProperty(window.GetType(), "position");
-			var windowPosition = (Rect) positionProperty.GetValue(window, null);
-
-			var rect = new Rect();
-			rect.width = width;
-			rect.height = 30;
-			rect.x = windowPosition.width / 2 + horizontalOffset - 18;
-			rect.y = 1;
-
-			// Set position
-			var parent = GetField(GetType(), "m_Parent").GetValue(this);
-			var method = GetMethod(parent.GetType(), "SetPosition");
-			method.Invoke(parent, new object[] { rect });
+			foreach (UnityEngine.Object o in Resources.FindObjectsOfTypeAll(containerWindowType))
+			{
+				if( (int) showModeProperty.GetValue(o, null) == 4)
+				{
+					mainWindow = o;
+					break;
+				}
+			}
 		}
 
 		#endregion
 
 		#region Reflection helpers
-
-		static object GetToolbar()
-		{
-			var classType = GetUnityEditorType("UnityEditor.Toolbar");
-			return GetField(classType, "get").GetValue(null);
-		}
 
 		static Type GetUnityEditorType(string name)
 		{
