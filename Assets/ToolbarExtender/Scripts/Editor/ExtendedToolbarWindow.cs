@@ -148,14 +148,14 @@ namespace ToolbarExtender
 			var r = GetField(parentWindow.GetType(), "m_RootView");
 			r.SetValue(parentWindow, null);
 
-			// Close (old) container window
-			var m = GetMethod(parentWindow.GetType(), "Close");
-			m.Invoke(parentWindow, new object[0]);
-
 			// Child to toolbar
 			var classType = GetUnityEditorType("UnityEditor.View");
 			var addChild = GetMethod(toolbarRef.GetType(), "AddChild", classType);
 			addChild.Invoke(toolbarRef, new[] { parent });
+
+			// Close (old) container window
+			var m = GetMethod(parentWindow.GetType(), "Close");
+			m.Invoke(parentWindow, new object[0]);
 		}
 
 		void UpdatePosition()
