@@ -6,16 +6,17 @@ namespace UnityToolbarExtender.Examples
 {
 	static class ToolbarStyles
 	{
-		public static GUIStyle commandButtonStyle;
-		public static GUIStyle appToolbar;
+		public static readonly GUIStyle commandButtonStyle;
 
 		static ToolbarStyles()
 		{
-			commandButtonStyle = new GUIStyle("Command");
-			commandButtonStyle.fontSize = 16;
-			commandButtonStyle.alignment = TextAnchor.MiddleCenter;
-			commandButtonStyle.imagePosition = ImagePosition.ImageAbove;
-			commandButtonStyle.fontStyle = FontStyle.Bold;
+			commandButtonStyle = new GUIStyle("Command")
+			{
+				fontSize = 16,
+				alignment = TextAnchor.MiddleCenter,
+				imagePosition = ImagePosition.ImageAbove,
+				fontStyle = FontStyle.Bold
+			};
 		}
 	}
 
@@ -30,28 +31,16 @@ namespace UnityToolbarExtender.Examples
 		static void OnToolbarGUI()
 		{
 			GUILayout.FlexibleSpace();
-			if(GUILayout.Button("1", ToolbarStyles.commandButtonStyle))
+
+			if(GUILayout.Button(new GUIContent("1", "Start Scene 1"), ToolbarStyles.commandButtonStyle))
 			{
 				SceneHelper.StartScene("Assets/ToolbarExtender/Example/Scenes/Scene1.unity");
 			}
-		}
-	}
 
-	[InitializeOnLoad]
-	public class SceneSwitchRightButton
-	{
-		static SceneSwitchRightButton()
-		{
-			ToolbarExtender.RightToolbarGUI.Add(OnToolbarGUI);
-		}
-
-		static void OnToolbarGUI()
-		{
-			if(GUILayout.Button("2", ToolbarStyles.commandButtonStyle))
+			if(GUILayout.Button(new GUIContent("2", "Start Scene 2"), ToolbarStyles.commandButtonStyle))
 			{
 				SceneHelper.StartScene("Assets/ToolbarExtender/Example/Scenes/Scene2.unity");
 			}
-			GUILayout.FlexibleSpace();
 		}
 	}
 

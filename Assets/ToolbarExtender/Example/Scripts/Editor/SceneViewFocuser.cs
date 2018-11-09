@@ -46,7 +46,7 @@ namespace UnityToolbarExtender.Examples
 
 		static void OnToolbarGUI()
 		{
-			var tex = (Texture) EditorGUIUtility.Load(@"UnityEditor.SceneView");
+			var tex = EditorGUIUtility.IconContent(@"UnityEditor.SceneView").image;
 
 			GUI.changed = false;
 
