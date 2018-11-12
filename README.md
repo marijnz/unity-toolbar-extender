@@ -1,36 +1,42 @@
 # unity-toolbar-extender
 
-Extend the Unity Toolbar with your own UI code. Please note that it's **super hacky** as the code is heavily relying on using reflection to access Unity's internal code. It might not work anymore with a new Unity update.
+Extend the Unity Toolbar with your own UI code. Please note that it's quite hacky as the code is relying on reflection to access Unity's internal code. It might not work anymore with a new Unity update.
 
 Add buttons to quickly access scenes, add sliders, toggles, anything. 
 
-![Imgur](https://i.imgur.com/rYqe8bN.png)
+![Imgur](https://i.imgur.com/zFX3cJH.png)
 
 ## How to
-This example code is shown in action in the gif below. Just copy the class, change it and make as many as you like. You can remove the _Example_ folder from the project. All you need is _ExtendedToolbarWindow.cs_.
+This example code is shown in action in the gif below. Just hook up your GUI method to ToolbarExtender.LeftToolbarGUI or ToolbarExtender.RightToolbarGUI to draw left and right from the play buttons.
 ```
 	[InitializeOnLoad]
-	public class LeftButtonToolbarWindow : ExtendedToolbarWindow
+	public class SceneSwitchLeftButton
 	{
-		static LeftButtonToolbarWindow()
+		static SceneSwitchLeftButton()
 		{
-			RegisterToolbarWindow<LeftButtonToolbarWindow>(width:35, horizontalOffset:-90);
+			ToolbarExtender.LeftToolbarGUI.Add(OnToolbarGUI);
 		}
 
-		protected override void OnGUI()
+		static void OnToolbarGUI()
 		{
-			base.OnGUI();
+			GUILayout.FlexibleSpace();
 
-			var buttonRect = new Rect(0, 0, position.width, position.height);
-			buttonRect.y = 4;
-
-			if(GUI.Button(buttonRect, "1", Styles.commandButtonStyle))
+			if(GUILayout.Button(new GUIContent("1", "Start Scene 1"), ToolbarStyles.commandButtonStyle))
 			{
 				SceneHelper.StartScene("Assets/ToolbarExtender/Example/Scenes/Scene1.unity");
+			}
+
+			if(GUILayout.Button(new GUIContent("2", "Start Scene 2"), ToolbarStyles.commandButtonStyle))
+			{
+				SceneHelper.StartScene("Assets/ToolbarExtender/Example/Scenes/Scene2.unity");
 			}
 		}
 	}
 ```
 
 
-![Imgur](https://i.imgur.com/4adMePz.gif)
+![Imgur](https://i.imgur.com/DDNfbHW.gif)
+
+
+## How is it done
+The current solution is done by https://github.com/OndrejPetrzilka and uses Unity's new UIElements code and reflection to hook up to the Toolbar's OnGUI callback.
