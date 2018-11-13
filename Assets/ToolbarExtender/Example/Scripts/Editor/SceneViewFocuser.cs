@@ -50,6 +50,13 @@ namespace UnityToolbarExtender.Examples
 
 			GUI.changed = false;
 
+			if(GUI.Button(new Rect(0,0, EditorGUIUtility.currentViewWidth, Screen.height), "", new GUIStyle("AppToolbar")))
+			{
+				Event.current.Use();
+			}
+
+			GUILayout.FlexibleSpace();
+
 			GUILayout.Toggle(m_enabled, new GUIContent(null, tex, "Focus SceneView when entering play mode"), "Command");
 			if (GUI.changed)
 			{

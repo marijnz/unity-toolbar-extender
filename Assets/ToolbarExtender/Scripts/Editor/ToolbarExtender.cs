@@ -56,12 +56,12 @@ namespace UnityToolbarExtender
 			rightRect.xMax -= 80; // Layout
 			rightRect.xMax -= 10; // Spacing between layout and layers
 			rightRect.xMax -= 80; // Layers
-			rightRect.xMax -= 20; // Spacing between layers and account
-			rightRect.xMax -= 80; // Account
-			rightRect.xMax -= 10; // Spacing between account and cloud
-			rightRect.xMax -= 32; // Cloud
-			rightRect.xMax -= 10; // Spacing between cloud and collab
-			rightRect.xMax -= 78; // Colab
+		//	rightRect.xMax -= 20; // Spacing between layers and account
+			//rightRect.xMax -= 80; // Account
+			//rightRect.xMax -= 10; // Spacing between account and cloud
+			//rightRect.xMax -= 32; // Cloud
+			//rightRect.xMax -= 10; // Spacing between cloud and collab
+			//rightRect.xMax -= 78; // Colab
 
 			// Add spacing around existing controls
 			leftRect.xMin += 10;
