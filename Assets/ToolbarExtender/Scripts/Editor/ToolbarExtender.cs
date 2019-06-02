@@ -9,19 +9,6 @@ namespace UnityToolbarExtender
 	[InitializeOnLoad]
 	public static class ToolbarExtender
 	{
-		public static class StandardDimensions
-		{
-			public const float space = 10;
-			public const float largeSpace = 20;
-			public const float buttonWidth = 32;
-			public const float dropdownWidth = 80;
-#if UNITY_2019_1_OR_NEWER
-			public const float playPauseStopWidth = 140;
-#else
-			public const float playPauseStopWidth = 100;
-#endif
-		}
-		
 		static int m_toolCount;
 		static GUIStyle m_commandStyle = null;
 
@@ -55,11 +42,15 @@ namespace UnityToolbarExtender
 
 		static void OnGUI()
 		{
-			const float space = StandardDimensions.space;
-			const float largeSpace = StandardDimensions.largeSpace;
-			const float buttonWidth = StandardDimensions.buttonWidth;
-			const float dropdownWidth = StandardDimensions.dropdownWidth;
-			const float playPauseStopWidth = StandardDimensions.playPauseStopWidth;
+			public const float space = 10;
+			public const float largeSpace = 20;
+			public const float buttonWidth = 32;
+			public const float dropdownWidth = 80;
+#if UNITY_2019_1_OR_NEWER
+			public const float playPauseStopWidth = 140;
+#else
+			public const float playPauseStopWidth = 100;
+#endif
 			
 			// Create two containers, left and right
 			// Screen is whole toolbar
