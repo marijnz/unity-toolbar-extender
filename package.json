@@ -1,0 +1,32 @@
+{
+  "name": "com.marijnzwemmer.unity-toolbar-extender",
+  "version": "1.2.0",
+  "displayName": "Toolbar Extender",
+  "description": "Extend the Unity Toolbar with your own Editor UI code.",
+  "unity": "2018.1",
+  "dependencies": {},
+  "keywords": [
+    "toolbar",
+    "extender",
+    "custom",
+    "UI",
+    "button"
+  ],
+  "author": {
+    "name": "Marijn Zwemmer",
+    "email": "marijn@marijnzwemmer.com",
+    "url": "https://github.com/marijnz/unity-toolbar-extender"
+  },
+  "samples": [
+    {
+      "displayName": "Scene switcher buttons",
+      "description": "Adds two buttons to toolbar which demonstrate handling play mode changes",
+      "path": "Example~/SceneSwitcher"
+    },
+    {
+      "displayName": "Scene view focuser",
+      "description": "Adds a toggle button to toolbar which demonstrates use of EditorPrefs",
+      "path": "Example~/SceneViewFocuser"
+    }
+  ]
+}
