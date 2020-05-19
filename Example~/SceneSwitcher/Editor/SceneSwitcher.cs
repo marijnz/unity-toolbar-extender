@@ -1,4 +1,5 @@
 ﻿using UnityEditor;
+using UnityEngine.SceneManagement;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 
@@ -34,12 +35,12 @@ namespace UnityToolbarExtender.Examples
 
 			if(GUILayout.Button(new GUIContent("1", "Start Scene 1"), ToolbarStyles.commandButtonStyle))
 			{
-				SceneHelper.StartScene("Assets/ToolbarExtender/Example/Scenes/Scene1.unity");
+				SceneHelper.StartScene("ToolbarExtenderExampleScene1");
 			}
 
 			if(GUILayout.Button(new GUIContent("2", "Start Scene 2"), ToolbarStyles.commandButtonStyle))
 			{
-				SceneHelper.StartScene("Assets/ToolbarExtender/Example/Scenes/Scene2.unity");
+				SceneHelper.StartScene("ToolbarExtenderExampleScene2");
 			}
 		}
 	}
@@ -48,14 +49,14 @@ namespace UnityToolbarExtender.Examples
 	{
 		static string sceneToOpen;
 
-		public static void StartScene(string scene)
+		public static void StartScene(string sceneName)
 		{
 			if(EditorApplication.isPlaying)
 			{
 				EditorApplication.isPlaying = false;
 			}
 
-			sceneToOpen = scene;
+			sceneToOpen = sceneName;
 			EditorApplication.update += OnUpdate;
 		}
 
@@ -72,8 +73,19 @@ namespace UnityToolbarExtender.Examples
 
 			if(EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo())
 			{
-				EditorSceneManager.OpenScene(sceneToOpen);
-				EditorApplication.isPlaying = true;
+				// need to get scene via search because the path to the scene
+				// file contains the package version so it'll change over time
+				string[] guids = AssetDatabase.FindAssets("t:scene " + sceneToOpen, null);
+				if (guids.Length == 0)
+				{
+					Debug.LogWarning("Couldn't find scene file");
+				}
+				else
+				{
+					string scenePath = AssetDatabase.GUIDToAssetPath(guids[0]);
+					EditorSceneManager.OpenScene(scenePath);
+					EditorApplication.isPlaying = true;
+				}
 			}
 			sceneToOpen = null;
 		}
