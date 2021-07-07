@@ -60,7 +60,7 @@ namespace UnityToolbarExtender
 					RegisterCallback("ToolbarZoneRightAlign", OnToolbarGUIRight);
 
 					void RegisterCallback(string root, Action cb) {
-						var toolbarZoneLeftAlign = mRoot.Q(root);
+						var toolbarZone = mRoot.Q(root);
 
 						var parent = new VisualElement()
 						{
@@ -74,7 +74,7 @@ namespace UnityToolbarExtender
 							cb?.Invoke();
 						}; 
 						parent.Add(container);
-						toolbarZoneLeftAlign.Add(parent);
+						toolbarZone.Add(parent);
 					}
 #else
 #if UNITY_2020_1_OR_NEWER
