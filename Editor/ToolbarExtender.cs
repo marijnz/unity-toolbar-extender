@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 using UnityEditor;
@@ -145,6 +145,24 @@ namespace UnityToolbarExtender
 				GUILayout.EndHorizontal();
 				GUILayout.EndArea();
 			}
+		}
+		
+		public static void GUILeft() {
+			GUILayout.BeginHorizontal();
+			foreach (var handler in LeftToolbarGUI)
+			{
+				handler();
+			}
+			GUILayout.EndHorizontal();
+		}
+		
+		public static void GUIRight() {
+			GUILayout.BeginHorizontal();
+			foreach (var handler in RightToolbarGUI)
+			{
+				handler();
+			}
+			GUILayout.EndHorizontal();
 		}
 	}
 }
