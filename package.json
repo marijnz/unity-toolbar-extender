@@ -1,6 +1,6 @@
 {
   "name": "com.marijnzwemmer.unity-toolbar-extender",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "displayName": "Toolbar Extender",
   "description": "Extend the Unity Toolbar with your own Editor UI code.",
   "unity": "2021.1",
