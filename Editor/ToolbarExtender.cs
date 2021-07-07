@@ -38,8 +38,9 @@ namespace UnityToolbarExtender
 			m_toolCount = toolIcons != null ? ((Array) toolIcons.GetValue(null)).Length : 5;
 #endif
 	
-			ToolbarCallback.OnToolbarGUI -= OnGUI;
-			ToolbarCallback.OnToolbarGUI += OnGUI;
+			ToolbarCallback.OnToolbarGUI = OnGUI;
+			ToolbarCallback.OnToolbarGUILeft = GUILeft;
+			ToolbarCallback.OnToolbarGUIRight = GUIRight;
 		}
 
 #if UNITY_2019_3_OR_NEWER
