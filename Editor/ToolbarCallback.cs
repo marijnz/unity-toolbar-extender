@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using UnityEngine;
 using UnityEditor;
 using System.Reflection;
@@ -33,7 +33,9 @@ namespace UnityToolbarExtender
 		/// Callback for toolbar OnGUI method.
 		/// </summary>
 		public static Action OnToolbarGUI;
-
+		public static Action OnToolbarGUILeft;
+		public static Action OnToolbarGUIRight;
+		
 		static ToolbarCallback()
 		{
 			EditorApplication.update -= OnUpdate;
@@ -49,7 +51,32 @@ namespace UnityToolbarExtender
 				var toolbars = Resources.FindObjectsOfTypeAll(m_toolbarType);
 				m_currentToolbar = toolbars.Length > 0 ? (ScriptableObject) toolbars[0] : null;
 				if (m_currentToolbar != null)
-				{
+				{ 
+#if UNITY_2021_1_OR_NEWER
+					var root = m_currentToolbar.GetType().GetField("m_Root", BindingFlags.NonPublic | BindingFlags.Instance);
+					var rawRoot = root.GetValue(m_currentToolbar);
+					var mRoot = rawRoot as VisualElement;
+					RegisterCallback("ToolbarZoneLeftAlign", OnToolbarGUILeft);
+					RegisterCallback("ToolbarZoneRightAlign", OnToolbarGUIRight);
+
+					void RegisterCallback(string root, Action cb) {
+						var toolbarZoneLeftAlign = mRoot.Q(root);
+
+						var parent = new VisualElement()
+						{
+							style = {
+								flexGrow = 1,
+								flexDirection = FlexDirection.Row,
+							}
+						};
+						var container = new IMGUIContainer();
+						container.onGUIHandler += () => { 
+							cb?.Invoke();
+						}; 
+						parent.Add(container);
+						toolbarZoneLeftAlign.Add(parent);
+					}
+#else
 #if UNITY_2020_1_OR_NEWER
 					var windowBackend = m_windowBackend.GetValue(m_currentToolbar);
 
@@ -68,6 +95,8 @@ namespace UnityToolbarExtender
 					handler -= OnGUI;
 					handler += OnGUI;
 					m_imguiContainerOnGui.SetValue(container, handler);
+					
+#endif
 				}
 			}
 		}
