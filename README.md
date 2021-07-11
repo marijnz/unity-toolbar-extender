@@ -42,7 +42,3 @@ This example code is shown in action in the gif below. Just hook up your GUI met
 
 
 ![Imgur](https://i.imgur.com/DDNfbHW.gif)
-
-
-## How is it done
-The current solution is done by https://github.com/OndrejPetrzilka and uses Unity's new UIElements code and reflection to hook up to the Toolbar's OnGUI callback.
