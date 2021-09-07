@@ -70,6 +70,7 @@ namespace UnityToolbarExtender
 							}
 						};
 						var container = new IMGUIContainer();
+						container.style.flexGrow = 1;
 						container.onGUIHandler += () => { 
 							cb?.Invoke();
 						}; 
