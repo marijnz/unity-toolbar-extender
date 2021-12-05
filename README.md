@@ -14,30 +14,30 @@ To use this in your Unity project import it from Unity Package Manager. You can 
 
 ## How to
 This example code is shown in action in the gif below. Just hook up your GUI method to ToolbarExtender.LeftToolbarGUI or ToolbarExtender.RightToolbarGUI to draw left and right from the play buttons.
-```
-	[InitializeOnLoad]
-	public class SceneSwitchLeftButton
+```c#
+[InitializeOnLoad]
+public class SceneSwitchLeftButton
+{
+	static SceneSwitchLeftButton()
 	{
-		static SceneSwitchLeftButton()
+		ToolbarExtender.LeftToolbarGUI.Add(OnToolbarGUI);
+	}
+
+	static void OnToolbarGUI()
+	{
+		GUILayout.FlexibleSpace();
+
+		if(GUILayout.Button(new GUIContent("1", "Start Scene 1"), ToolbarStyles.commandButtonStyle))
 		{
-			ToolbarExtender.LeftToolbarGUI.Add(OnToolbarGUI);
+			SceneHelper.StartScene("Assets/ToolbarExtender/Example/Scenes/Scene1.unity");
 		}
 
-		static void OnToolbarGUI()
+		if(GUILayout.Button(new GUIContent("2", "Start Scene 2"), ToolbarStyles.commandButtonStyle))
 		{
-			GUILayout.FlexibleSpace();
-
-			if(GUILayout.Button(new GUIContent("1", "Start Scene 1"), ToolbarStyles.commandButtonStyle))
-			{
-				SceneHelper.StartScene("Assets/ToolbarExtender/Example/Scenes/Scene1.unity");
-			}
-
-			if(GUILayout.Button(new GUIContent("2", "Start Scene 2"), ToolbarStyles.commandButtonStyle))
-			{
-				SceneHelper.StartScene("Assets/ToolbarExtender/Example/Scenes/Scene2.unity");
-			}
+			SceneHelper.StartScene("Assets/ToolbarExtender/Example/Scenes/Scene2.unity");
 		}
 	}
+}
 ```
 
 
