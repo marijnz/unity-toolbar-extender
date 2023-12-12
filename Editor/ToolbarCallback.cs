@@ -77,6 +77,9 @@ namespace UnityToolbarExtender
 						parent.Add(container);
 						toolbarZone.Add(parent);
 					}
+
+					// Handle root visual element being detached from m_currentToolbar when changing between displays of different DPI
+					mRoot.RegisterCallback<DetachFromPanelEvent>(_ => m_currentToolbar = null);
 #else
 #if UNITY_2020_1_OR_NEWER
 					var windowBackend = m_windowBackend.GetValue(m_currentToolbar);
