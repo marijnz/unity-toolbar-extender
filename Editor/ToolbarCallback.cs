@@ -42,6 +42,8 @@ namespace UnityToolbarExtender
 	
 		private static int setupAttempts;
 		private const int MaxSetupAttempts = 200;
+		private static VisualElement leftDock;
+		private static VisualElement rightDock;
 
 		static ToolbarCallback()
 		{
@@ -51,6 +53,17 @@ namespace UnityToolbarExtender
 
 		private static void Initialize()
 		{
+			if (leftDock != null)
+			{
+				if (leftDock.panel != null) return;
+
+				leftDock = null;
+				rightDock = null;
+				setupAttempts = 0;
+			}
+
+			if (setupAttempts > MaxSetupAttempts) return;
+
 			setupAttempts++;
 
 			Type mainToolbarWindowType = typeof(UnityEditor.Editor).Assembly.GetType("UnityEditor.MainToolbarWindow");
@@ -69,7 +82,6 @@ namespace UnityToolbarExtender
 				if (setupAttempts > MaxSetupAttempts)
 				{
 						Debug.LogWarning("[CustomToolbar] Could not find MainToolbarWindow instance after multiple attempts. Aborting.");
-						EditorApplication.update -= Initialize;
 				}
 
 				return;
@@ -80,8 +92,6 @@ namespace UnityToolbarExtender
 
 			if (root == null)
 			{
-				EditorApplication.update -= Initialize;
-
 				return;
 			}
 
@@ -92,7 +102,6 @@ namespace UnityToolbarExtender
 				if (setupAttempts > MaxSetupAttempts)
 				{
 						Debug.LogWarning("[CustomToolbar] Found MainToolbarWindow, but its middle-container is not ready. Aborting.");
-						EditorApplication.update -= Initialize;
 				}
 
 				return;
@@ -102,12 +111,13 @@ namespace UnityToolbarExtender
 
 			if (parentContainer == null)
 			{
-				EditorApplication.update -= Initialize;
-
 				return;
 			}
 
-			var leftDock = new VisualElement
+			parentContainer.Q("CustomToolbarLeft")?.RemoveFromHierarchy();
+			parentContainer.Q("CustomToolbarRight")?.RemoveFromHierarchy();
+
+			leftDock = new VisualElement
 			{
 						name = "CustomToolbarLeft",
 						style =
@@ -120,7 +130,7 @@ namespace UnityToolbarExtender
 						}
 			};
 
-			var rightDock = new VisualElement
+			rightDock = new VisualElement
 			{
 						name = "CustomToolbarRight",
 						style =
@@ -139,7 +149,7 @@ namespace UnityToolbarExtender
 			leftDock.Add(new IMGUIContainer(static () => OnToolbarGUILeft?.Invoke()));
 			rightDock.Add(new IMGUIContainer(static () => OnToolbarGUIRight?.Invoke()));
 
-			EditorApplication.update -= Initialize;
+			setupAttempts = 0;
 		}
 
 		// end Unity 6.3 workaround
